@@ -3,7 +3,7 @@ kind: ReplicationController
 metadata:
   name: gogs
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     role: gogs
   template:
@@ -13,9 +13,6 @@ spec:
         role: gogs
     spec:
       volumes:
-        - name: etcssl
-          secret:
-            secretName: tls-certificates
         - name: data
           gcePersistentDisk:
             pdName: git
@@ -24,12 +21,9 @@ spec:
       - name: gogs
         image: gogs/gogs:{{GOGS_VERSION}}
         ports:
-          - containerPort: 80
-          - containerPort: 443
+          - containerPort: 22
+          - containerPort: 3000
         volumeMounts:
-          - name: etcssl
-            readOnly: true
-            mountPath: /etc/ssl
           - name: data
             readOnly: false
             mountPath: /data
