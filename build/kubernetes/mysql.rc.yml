@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: mysql
+spec:
+  replicas: 1
+  selector:
+    role: mysql
+  template:
+    metadata:
+      name: mysql
+      labels:
+        role: mysql
+    spec:
+      volumes:
+        - name: lib
+          gcePersistentDisk:
+            pdName: gogs-mysql  
+            fsType: ext4
+      containers:
+      - name: mysql
+        image: mysql:{{MYSQL_VERSION}}
+        ports:
+          - containerPort: 3306 
+        volumeMounts:
+          - name: lib
+            readOnly: false
+            mountPath: /var/lib/mysql
