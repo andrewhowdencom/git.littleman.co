@@ -1,0 +1,6 @@
+# Ignore dotfiles.
+
+.*
+
+# Keep these dotfiles
+!\.gitignore
