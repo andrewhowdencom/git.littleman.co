@@ -1,0 +1,34 @@
+branches:
+  only:
+  - master
+
+addons:
+  apt:
+    packages:
+    - python-docutils
+    - git
+
+env:
+- CLOUDSDK_PYTHON_SITEPACKAGES=1
+  GIT_SSH_COMMAND="ssh -i .privkey"
+  GOGS_VERSION="0.9.13"
+
+before_install:
+  "./build/scripts/CI/unpack-secrets.sh"
+
+install:
+  "./build/scripts/CI/install-dependencies.sh"
+
+before_script:
+  "./build/scripts/CI/auth.sh"
+
+script:
+  - "./build/scripts/CI/deploy.sh"
+
+after_success:
+  "./build/scripts/CI/success.sh"
+
+after_failure:
+  "./build/scripts/CI/failure.sh"
+
+after_script:

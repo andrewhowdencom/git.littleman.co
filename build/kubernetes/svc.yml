@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: gogs
+spec:
+  selector:
+    role: gogs
+  ports:
+    - protocol: TCP
+      name: ssh
+      port: 22
+    - protocol: TCP
+      name: http
+      port: 3000
+  type: LoadBalancer

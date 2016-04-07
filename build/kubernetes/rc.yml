@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: gogs
+spec:
+  replicas: 2
+  selector:
+    role: gogs
+  template:
+    metadata:
+      name: gogs
+      labels:
+        role: gogs
+    spec:
+      volumes:
+        - name: etcssl
+          secret:
+            secretName: tls-certificates
+        - name: data
+          gcePersistentDisk:
+            pdName: git
+            fsType: ext4
+      containers:
+      - name: gogs
+        image: gogs/gogs:{{GOGS_VERSION}}
+        ports:
+          - containerPort: 80
+          - containerPort: 443
+        volumeMounts:
+          - name: etcssl
+            readOnly: true
+            mountPath: /etc/ssl
+          - name: data
+            readOnly: false
+            mountPath: /data
