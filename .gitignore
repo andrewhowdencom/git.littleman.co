@@ -4,3 +4,4 @@
 
 # Keep these dotfiles
 !\.gitignore
+!\.env 
