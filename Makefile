@@ -7,7 +7,7 @@
 SHELL := /bin/bash
 
 PROJECT_NS   := git-littleman-co
-CONTAINER_NS := git-littleman-co
+CONTAINER_NS := littleman-co
 
 GIT_HASH     := $(shell git rev-parse --short HEAD)
 
@@ -35,14 +35,14 @@ help: ## Show this menu
 	@grep -E '^[a-zA-Z_-%]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "    \033[32m%-30s\033[0m %s\n", $$1, $$2}'
 
 push-container-%: ## Tags and pushes a container to the repo
-	docker tag ${CONTAINER_NS}/$*:${GIT_HASH} gcr.io/${GCR_NAMESPACE}/$*:${GIT_HASH}
-	docker push gcr.io/${GCR_NAMESPACE}/$*:${GIT_HASH}
+	docker tag ${CONTAINER_NS}/${PROJECT_NS}-$*:${GIT_HASH} gcr.io/${GCR_NAMESPACE}/${PROJECT_NS}-$*:${GIT_HASH}
+	docker push gcr.io/${GCR_NAMESPACE}/${PROJECT_NS}-$*:${GIT_HASH}
 
 push-tls-certificates:
 	sed "s/{{CERT}}/${SECRET_CERT}/" build/kubernetes/tls.yml | sed -e "s/{{FULL_CHAIN}}/${SECRET_FULL_CHAIN}/" | sed -e "s/{{PRIVKEY}}/${SECRET_PRIVKEY}/" | kubectl create -f -
 
 build-container-%: ## Builds the $* (gollum) container, and tags it with the git hash.
-	docker build -t ${CONTAINER_NS}/$*:${GIT_HASH} -f build/docker/$*/Dockerfile .
+	docker build -t ${CONTAINER_NS}/${PROJECT_NS}-$*:${GIT_HASH} -f build/docker/$*/Dockerfile .
 
 deploy-container-%: build-container-% push-container-% ## Pushes a container to GCR. Will eventually update Kubernetes
 	echo "Deployed"
