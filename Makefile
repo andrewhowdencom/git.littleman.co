@@ -29,6 +29,8 @@ SECRET_CERT       := $(shell base64 -w 0 etc/ssl/cert.pem)
 SECRET_FULL_CHAIN := $(shell base64 -w 0 etc/ssl/fullchain.pem)
 SECRET_PRIVKEY    := $(shell base64 -w 0 etc/ssl/privkey.pem)
 
+GOGS_VERSION := 0.9.13
+
 help: ## Show this menu
 	@echo -e $(ANSI_TITLE)git.littleman.co$(ANSI_OFF)$(ANSI_SUBTITLE)" - Development documentation that is handy\n"$(ANSI_OFF)
 	@echo -e $(ANSI_TITLE)Commands:$(ANSI_OFF)
@@ -44,5 +46,5 @@ push-tls-certificates:
 build-container-%: ## Builds the $* (gollum) container, and tags it with the git hash.
 	docker build -t ${CONTAINER_NS}/${PROJECT_NS}-$*:${GIT_HASH} -f build/docker/$*/Dockerfile .
 
-deploy-container-%: build-container-% push-container-% ## Pushes a container to GCR. Will eventually update Kubernetes
-	echo "Deployed"
+deploy-%: ## Push a deployment to Kubernetes
+	sed "s/{{GOGS_VERSION}}/${GOGS_VERSION}/" "build/kubernetes/$*.deployment.yml" | sed -e "s/{{GIT_HASH}}/${GIT_HASH}/" | kubectl apply -f -

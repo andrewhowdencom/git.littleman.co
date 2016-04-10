@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gogs-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        role: gogs
+    spec:
+      volumes:
+        - name: data
+          gcePersistentDisk:
+            pdName: git
+            fsType: ext4
+      containers:
+        - name: gogs
+          image: gogs/gogs:{{GOGS_VERSION}}
+          ports:
+            - containerPort: 22
+            - containerPort: 3000
+          volumeMounts:
+            - name: data
+              readOnly: false
+              mountPath: /data
+        - name: nginx
+          image: gcr.io/littlemanco/git-littleman-co-nginx:{{GIT_HASH}}
+          ports:
+             - containerPort: 80
+             - containerPort: 443
