@@ -25,7 +25,7 @@ spec:
               readOnly: false
               mountPath: /data
         - name: nginx
-          image: gcr.io/littlemanco/git-littleman-co-nginx:{{GIT_HASH}}
+          image: gcr.io/littleman-co/git-littleman-co-nginx:{{GIT_HASH}}
           ports:
              - containerPort: 80
              - containerPort: 443
