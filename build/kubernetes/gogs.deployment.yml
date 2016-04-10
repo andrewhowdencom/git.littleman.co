@@ -16,6 +16,11 @@ spec:
             fsType: ext4
       containers:
         - name: gogs
+          env:
+            # This prevents the Gogs container from automatically forwarding
+            # ports
+            - name: SOCAT_LINK
+              value: "false"
           image: gogs/gogs:{{GOGS_VERSION}}
           ports:
             - containerPort: 22
