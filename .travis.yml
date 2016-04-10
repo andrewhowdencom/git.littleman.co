@@ -8,6 +8,11 @@ addons:
     - python-docutils
     - git
 
+sudo: required
+
+services:
+- docker
+
 env:
 - CLOUDSDK_PYTHON_SITEPACKAGES=1
   GIT_SSH_COMMAND="ssh -i .privkey"
