@@ -5,3 +5,6 @@
 # Keep these dotfiles
 !\.gitignore
 !\.env 
+
+# Ignore certificates
+*.pem
