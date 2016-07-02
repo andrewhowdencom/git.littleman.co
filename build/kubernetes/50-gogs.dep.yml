@@ -7,7 +7,7 @@ metadata:
     application: "gogs"
     role: "application"
   name: "gogs-deployment"
-  namespace: "gogs-littleman-co"
+  namespace: "git-littleman-co"
 spec:
   replicas: 1
   selector:
@@ -35,9 +35,9 @@ spec:
             secretName: "gogs-etc-tls"
       containers:
       - name: "gogs"
-          env:
-          - name: "SOCAT_LINK"
-            value: "false"
+        env:
+        - name: "SOCAT_LINK"
+          value: "false"
         image: "gogs/gogs:{{GOGS_VERSION}}"
         imagePullPolicy: "IfNotPresent"
         ports:
