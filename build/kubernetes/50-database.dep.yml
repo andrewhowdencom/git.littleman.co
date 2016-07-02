@@ -1,0 +1,56 @@
+---
+apiVersion: "extensions/v1beta1"
+kind: "Deployment"
+metadata:
+  labels:
+    application: "mysql"
+    role: "database"
+  name: "mysql-deployment"
+  namespace: "git-littleman-co"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      application: "mysql"
+      role: "database"
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: "RollingUpdate"
+  template:
+    metadata:
+      labels:
+        application: "mysql"
+        role: "database"
+    spec:
+      volumes:
+      - name: "lib"
+        gcePersistentDisk:
+          pdName: "git-littleman-co-mysql-lib"
+          fsType: "ext4"
+      containers:
+      - name: "mysql"
+        env:
+        - name: "MYSQL_RANDOM_ROOT_PASSWORD"
+          value: "yes"
+        image: "mysql:5.7.13"
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - containerPort: 3306
+          protocol: "TCP"
+        volumeMounts:
+        - name: "lib"
+          mountPath: "/var/lib/mysql"
+        livenessProbe:
+          tcpSocket:
+            port: 3306
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        readinessProbe:
+          tcpSocket:
+            port: 3306
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+      restartPolicy: "Always"
+      securityContext: {}

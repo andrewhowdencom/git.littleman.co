@@ -1,0 +1,13 @@
+---
+kind: "Service"
+apiVersion: "v1"
+metadata:
+  name: "mysql"
+spec:
+  selector:
+    application: "mysql"
+    role: "database"
+  ports:
+    - protocol: "TCP"
+      port: 3306
+  type: "ClusterIP"
