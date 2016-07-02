@@ -47,4 +47,4 @@ build-container-%: ## Builds the $* (gollum) container, and tags it with the git
 	docker build -t ${CONTAINER_NS}/${PROJECT_NS}-$*:${GIT_HASH} -f build/docker/$*/Dockerfile .
 
 deploy-%: ## Push a deployment to Kubernetes
-	sed "s/{{GOGS_VERSION}}/${GOGS_VERSION}/" "build/kubernetes/$*.deployment.yml" | sed -e "s/{{GIT_HASH}}/${GIT_HASH}/" | kubectl apply -f -
+	sed "s/{{GOGS_VERSION}}/${GOGS_VERSION}/" "build/kubernetes/50-$*.dep.yml" | sed -e "s/{{GIT_HASH}}/${GIT_HASH}/" | kubectl apply -f -
