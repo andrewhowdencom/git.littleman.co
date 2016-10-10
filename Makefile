@@ -29,7 +29,7 @@ SECRET_CERT       := $(shell base64 -w 0 etc/tls/cert.pem)
 SECRET_FULL_CHAIN := $(shell base64 -w 0 etc/tls/fullchain.pem)
 SECRET_PRIVKEY    := $(shell base64 -w 0 etc/tls/privkey.pem)
 
-GOGS_VERSION := 0.9.13
+GOGS_VERSION := 0.9.97
 
 help: ## Show this menu
 	@echo -e $(ANSI_TITLE)git.littleman.co$(ANSI_OFF)$(ANSI_SUBTITLE)" - Development documentation that is handy\n"$(ANSI_OFF)
